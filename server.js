@@ -1,7 +1,6 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const morgan = require('morgan');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
 
@@ -19,17 +18,16 @@ mongoose
   .then(() => console.log('DB CONNECTED'))
   .catch((err) => console.log(`DB CONNECTION ERR`, err));
 
+// load API route
+const API_ROUTER = require('./api.routes');
+
 // middlewares
 app.use(morgan('dev'));
 app.use(express.json({ limit: '2mb' }));
 app.use(cors());
 
-// route
-app.get('/api', function (req, res) {
-  res.json({
-    data: 'From node API Updated.',
-  });
-});
+// routes
+app.use('/api', API_ROUTER);
 
 // port
 const port = process.env.PORT || 8000;
